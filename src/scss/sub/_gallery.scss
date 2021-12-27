@@ -1,0 +1,11 @@
+
+.list {
+  opacity: 0;
+  transform: translateY(200px);
+  transition: 1s;
+
+  &.on {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
