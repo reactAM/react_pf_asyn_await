@@ -9,6 +9,9 @@ ul, ol {
 a {
   text-decoration: none; }
 
+body {
+  background: #efefef; }
+
 header {
   width: 100%;
   background: #333; }
@@ -51,14 +54,18 @@ footer {
 
 .content {
   padding: 150px 0px; }
-  .content .inner {
+  .content > .inner {
     width: 1180px;
     margin: 0px auto; }
-    .content .inner h1 {
+    .content > .inner h1 {
       font: normal 30px/1 "arial";
       color: #555;
       margin-bottom: 30px; }
 
+@media screen and (max-width: 1179px) {
+  .content > .inner {
+    width: 100%;
+    padding: 0px 40px; } }
 .board .inner article {
   width: 100%;
   padding: 20px;
@@ -79,7 +86,27 @@ footer {
       width: 25%;
       padding: 10px;
       float: left; }
-      .gallery .inner .list ul .item img {
-        width: 100%; }
+      .gallery .inner .list ul .item .inner {
+        width: 100%;
+        padding: 12px;
+        background: #fff;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1); }
+        .gallery .inner .list ul .item .inner img {
+          width: 100%;
+          margin-bottom: 10px; }
+        .gallery .inner .list ul .item .inner h2 {
+          font: normal 12px/1.2 "arial";
+          color: #777;
+          margin-bottom: 20px; }
+
+@media screen and (max-width: 1179px) {
+  .gallery .item {
+    width: 33.333% !important; } }
+@media screen and (max-width: 739px) {
+  .gallery .item {
+    width: 50% !important; } }
+@media screen and (max-width: 479px) {
+  .gallery .item {
+    width: 100% !important; } }
 
 /*# sourceMappingURL=style.css.map */

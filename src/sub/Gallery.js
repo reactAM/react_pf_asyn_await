@@ -4,8 +4,8 @@ import Masonry from "react-masonry-component";
 
 //masonry 개별 패널 옵션
 const masonryOptions = {
-  fitWidth: false,
-  //columnWidht: 300,
+  fitWidth: false, 
+  //columnWidth: 200,
   gutter: 0, //간격 (반응형을 위해서 보통 0처리하고 scss에서 padding으로 구현)
   itemSelector: ".item" //각 패널의 클래스명
 }
@@ -51,7 +51,11 @@ function Gallery(){
                 const imgSrc = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`;
                 return (
                   <li key={index} className="item">                  
-                    <img src={imgSrc} />
+                    <div className="inner">
+                      <img src={imgSrc} />
+                      
+                      <h2>{item.title}</h2>
+                    </div>
                   </li>
                 )
               })
@@ -69,7 +73,11 @@ function Gallery(){
       setItems(json.data.photos.photo);
     })    
     
-    list.current.classList.add("on"); 
+    //masonry ui가 적용될 시간을 벌기 위해서 1초뒤 리스트 활성화
+    setTimeout(()=>{
+      list.current.classList.add("on");
+    },1000);
+     
   }
 }
 
