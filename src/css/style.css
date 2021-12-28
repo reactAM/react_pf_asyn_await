@@ -65,12 +65,21 @@ footer {
   border: 1px solid #bbb;
   margin-bottom: 20px; }
 
-.list {
+.gallery .inner .list {
   opacity: 0;
   transform: translateY(200px);
-  transition: 1s; }
-  .list.on {
+  transition: 1s;
+  position: relative; }
+  .gallery .inner .list.on {
     opacity: 1;
     transform: translateY(0px); }
+  .gallery .inner .list ul {
+    width: 100%; }
+    .gallery .inner .list ul .item {
+      width: 25%;
+      padding: 10px;
+      float: left; }
+      .gallery .inner .list ul .item img {
+        width: 100%; }
 
 /*# sourceMappingURL=style.css.map */
