@@ -1,28 +1,31 @@
 import axios from "axios";
-//useRef import
 import { useEffect, useState, useRef } from "react";
 
 function Gallery(){
   const baseURL = "https://www.flickr.com/services/rest/?";
   const method1 = "flickr.interestingness.getList";
+  const method2 = "flickr.photos.search";
   const key= "e7ed3b39fe112d7e93d03c19325305e0";
   const count = 500;
   const url = `${baseURL}method=${method1}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1`;
+  //method2방식(seach)으로 Flickr 요청 url추가 
+  const url2 = `${baseURL}method=${method2}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1&tags=ocean`;
   
-  let [items, setItems] = useState([]);
-  //list를 참조하기 위해 일단 useRef에 null을 담아 list변수 생성
+  let [items, setItems] = useState([]); 
   let list = useRef(null);
   console.log(list);
   
   useEffect(()=>{
-    getFlickr();
+    //처음 로딩시 url(interest)로 flickr 데이터 호출
+    getFlickr(url);
   },[]);
 
   return (
     <section className="content gallery">
       <div className="inner">
         <h1>Gallery</h1>
-        {/* 참고 싶은 요소에 ref props를 만들고 변수 list대입 */}
+        <button>수정</button>
+       
         <ul className="list" ref={list}>
           {
             items.map((item, index)=>{
@@ -42,22 +45,17 @@ function Gallery(){
       </div>
     </section>
   )
-
-  //wrapping함수에 async 키워드 적용
-  async function getFlickr(){
-
-    //axio문 앞쪽에 await키워드를 추가해서 동기화
+  
+  //함수 외부에서 요청 주소를 인수로 받을수 있게 함수 수정
+  async function getFlickr(url){    
     await axios
     .get(url)
     .then(json=>{      
       setItems(json.data.photos.photo);
-    })
+    })    
     
-    //위쪽의 axios를 통해서 데이터가 모두 호출완료되면 list에 on을 붙여서 로딩 모션 추가
     list.current.classList.add("on"); 
   }
 }
-
-
 
 export default Gallery;
