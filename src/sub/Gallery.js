@@ -24,7 +24,13 @@ function Gallery(){
     <section className="content gallery">
       <div className="inner">
         <h1>Gallery</h1>
-        <button>수정</button>
+        {/* 버튼 클릭시 */}
+        <button onClick={()=>{
+          // 기존 리스트에 on클래스를 지워서 화면 아래로 숨김처리
+          list.current.classList.remove("on");
+          //다시 getFlickr에 인수로 url2를 넣어서 새로운 검색 데이터 호출
+          getFlickr(url2);
+        }}>수정</button>
        
         <ul className="list" ref={list}>
           {
