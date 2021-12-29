@@ -29,11 +29,15 @@ function Gallery(){
       <div className="inner">
         <h1 onClick={()=>{
           list.current.classList.remove("on");
+          //기존 리스트가 아래로 사라질떄 다시 loading값 true로 변경
+          setLoading(true);
           getFlickr(url);
         }}>Gallery</h1>
        
         <button onClick={()=>{          
-          list.current.classList.remove("on");          
+          list.current.classList.remove("on");   
+          //기존 리스트가 아래로 사라질떄 다시 loading값 true로 변경
+          setLoading(true);       
           getFlickr(url2);
         }}>수정</button>
 
