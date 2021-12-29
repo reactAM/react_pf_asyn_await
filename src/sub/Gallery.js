@@ -15,6 +15,7 @@ function Gallery(){
   let [items, setItems] = useState([]);   
   let [loading, setLoading] = useState(true);
   let [enableClick, setEnableClick] = useState(true);
+  let [interest, setInterest] = useState(true);
   let list = useRef(null);
   let input = useRef(null);
   
@@ -29,7 +30,7 @@ function Gallery(){
     <section className="content gallery">
       <div className="inner">
         <h1 onClick={()=>{          
-          if(enableClick){
+          if(enableClick && !interest){ //모션이 끝났고 현재 interest값이 true가 아닐때 interst호출 기능 실행
             setEnableClick(false);           
             list.current.classList.remove("on");         
             setLoading(true);
@@ -42,11 +43,12 @@ function Gallery(){
         }}>Gallery</h1>
 
         <div className="searchBox">  
-          {/* 인풋 요소에 keypress이벤트 연결 */}
           <input type="text" ref={input} onKeyPress={e=>{
             if(e.key !== "Enter") return;
-            
-            setEnableClick(false);             
+            if(enableClick){
+              setEnableClick(false);  
+              //검색어 입력하고 엔터키 눌렀을떄 interest값을 false로 변경해 제목클릭가능하게 설정
+              setInterest(false);          
               list.current.classList.remove("on");         
               setLoading(true);
              
@@ -58,10 +60,13 @@ function Gallery(){
                 count: 500,
                 tags: tags 
               });
+            }            
           }} />
           <button onClick={()=>{
             if(enableClick){
-              setEnableClick(false);             
+              setEnableClick(false);  
+              //검색어 버튼 클릭시 interest값을 false로 변경해 제목클릭가능하게 설정
+              setInterest(false);             
               list.current.classList.remove("on");         
               setLoading(true);
              
