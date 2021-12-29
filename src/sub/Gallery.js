@@ -10,12 +10,14 @@ const masonryOptions = {
   itemSelector: ".item" //각 패널의 클래스명
 }
 
-
-
 function Gallery(){ 
   let [items, setItems] = useState([]); 
   let list = useRef(null);  
   let [url, url2] = getURL();
+  /*
+  let url = getURL()[0];
+  let url2 = getURL()[1];
+  */
   
   useEffect(()=>{    
     getFlickr(url);
@@ -24,7 +26,10 @@ function Gallery(){
   return (
     <section className="content gallery">
       <div className="inner">
-        <h1>Gallery</h1>
+        <h1 onClick={()=>{
+          list.current.classList.remove("on");
+          getFlickr(url);
+        }}>Gallery</h1>
        
         <button onClick={()=>{          
           list.current.classList.remove("on");          
