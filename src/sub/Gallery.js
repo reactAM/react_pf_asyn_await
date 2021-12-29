@@ -14,40 +14,47 @@ const masonryOptions = {
 function Gallery(){ 
   let [items, setItems] = useState([]);   
   let [loading, setLoading] = useState(true);
-  //enableClick에 true값 저장
   let [enableClick, setEnableClick] = useState(true);
   let list = useRef(null);  
-  let [url, url2] = getURL();  
+  //let [url, url2] = getURL();  
   
-  useEffect(()=>{    
-    getFlickr(url);
+  useEffect(()=>{  
+    //로딩시 interest방식으로 flickr데이터 호출  
+    getFlickr({
+      type: "interest",
+      count: 500
+    });
   },[]);  
 
   return (
     <section className="content gallery">
       <div className="inner">
-        <h1 onClick={()=>{
-          //이벤트 안쪽 코드를 enableClick이 true일때만 실행
+        <h1 onClick={()=>{          
           if(enableClick){
-            //조건식을 통과하자마자 enableClick값을 바로 false로 변경
             setEnableClick(false);
             console.log("You Clicked!!!")
             list.current.classList.remove("on");         
             setLoading(true);
-            getFlickr(url);
+            getFlickr({
+              type: "interest",
+              count: 500
+            });
           }
           
         }}>Gallery</h1>
        
-        <button onClick={()=>{   
-          //이벤트 안쪽 코드를 enableClick이 true일때만 실행
+        <button onClick={()=>{ 
           if(enableClick){
-            //조건식을 통과하자마자 enableClick값을 바로 false로 변경
             setEnableClick(false);
             console.log("You Clicked!!!")
             list.current.classList.remove("on"); 
-            setLoading(true);       
-            getFlickr(url2);
+            setLoading(true);   
+            //버튼 클릭시 키워드 검색 방식으로 데이터 호출    
+            getFlickr({
+              type: "search",
+              count: 500,
+              tags: "노을"
+            });
           }  
         }}>수정</button>
 
@@ -82,18 +89,31 @@ function Gallery(){
     </section>
   )  
 
-  function getURL(){
+ 
+  
+  async function getFlickr(opt){  
+    //최종적으로 만들어질 주소가 담길 빈 변수 생성
+    let url = "";
+
+    //기본 주소관련 공통 변수사항 저장
     const baseURL = "https://www.flickr.com/services/rest/?";
     const method1 = "flickr.interestingness.getList";
     const method2 = "flickr.photos.search";
     const key= "e7ed3b39fe112d7e93d03c19325305e0";
-    const count = 500;
-    const url = `${baseURL}method=${method1}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1`;  
-    const url2 = `${baseURL}method=${method2}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1&tags=ocean`;
-    return [url, url2];
-  }
-  
-  async function getFlickr(url){    
+    const count = opt.count;
+
+    //해당 함수 호출시 type이 interest일때 호출 주소 완성
+    if(opt.type === "interest"){
+      url = `${baseURL}method=${method1}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1`;  
+    }
+    //type이 search일때 호출 주소 완성
+    else if(opt.type === "search"){
+      url = `${baseURL}method=${method2}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1&tags=${opt.tags}`;
+    //만약 type이 위의 2가지 경우가 아닐때 오류내용 출력
+    }else{
+      console.error("api요청 타입을 interest, search중에서 지정하세요.");
+    }
+
     await axios
     .get(url)
     .then(json=>{      
