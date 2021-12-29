@@ -2,6 +2,9 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import Masonry from "react-masonry-component";
 
+//public폴더의 절대경로를 변수에 저장
+const path=process.env.PUBLIC_URL;
+
 //masonry 개별 패널 옵션
 const masonryOptions = {
   fitWidth: false, 
@@ -12,16 +15,14 @@ const masonryOptions = {
 
 function Gallery(){ 
   let [items, setItems] = useState([]); 
+  //로딩바 출력 유무를 결정할 state생성하고 초기값을 true로 설정
+  let [loading, setLoading] = useState(true);
   let list = useRef(null);  
-  let [url, url2] = getURL();
-  /*
-  let url = getURL()[0];
-  let url2 = getURL()[1];
-  */
+  let [url, url2] = getURL();  
   
   useEffect(()=>{    
     getFlickr(url);
-  },[]);
+  },[]);  
 
   return (
     <section className="content gallery">
@@ -35,14 +36,16 @@ function Gallery(){
           list.current.classList.remove("on");          
           getFlickr(url2);
         }}>수정</button>
+
+        {/* 삼항 연산자로 loading state값이 true일 때에만 로딩이미지 출력 */}
+        {(loading) ? <img className="loading" src={path+"/img/loading.gif"}/> : ""}
        
-        <div className="list" ref={list}> 
-          {/* 아래 옵션값을 통해서 동적으로 부모 태그 생성 */}
+        <div className="list" ref={list}>         
           <Masonry
-            className={"frame"} //동적으로 생길 클래스명
-            elementType={"ul"} //동적으로 생길 태그명
-            disableImagesLoaded= {false}//이미로딩완료 처리함
-            updateOnEachImageLoad= {false}//개별이미지로딩완료 처리함
+            className={"frame"} 
+            elementType={"ul"} 
+            disableImagesLoaded= {false}
+            updateOnEachImageLoad= {false}
             options= {masonryOptions}
           > 
             {
@@ -86,6 +89,8 @@ function Gallery(){
     //masonry ui가 적용될 시간을 벌기 위해서 1초뒤 리스트 활성화
     setTimeout(()=>{
       list.current.classList.add("on");
+      //데이터 호출이 끝나면 setLoading으로 loading state값 false로 변경
+      setLoading(false);
     },1000);
      
   }

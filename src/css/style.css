@@ -93,6 +93,16 @@ footer .inner p {
   margin-bottom: 20px;
 }
 
+.gallery .inner {
+  position: relative;
+}
+.gallery .inner .loading {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  width: 50%;
+  transform: translateX(-50%);
+}
 .gallery .inner .list {
   opacity: 0;
   transform: translateY(200px);
