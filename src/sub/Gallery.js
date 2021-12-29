@@ -15,11 +15,17 @@ function Gallery(){
   let [items, setItems] = useState([]);   
   let [loading, setLoading] = useState(true);
   let [enableClick, setEnableClick] = useState(true);
-  let list = useRef(null);  
-  //let [url, url2] = getURL();  
+  let list = useRef(null); 
+  //useRef로 참조할 대상을 담을 객체 생성
+  let input = useRef(null);
+  /*
+  useRef를 쓰는 이유
+  --기존의 컴포넌트들을 state값이 변경될때마다 재 렌더링이 일어남
+  --useRef를 통해서 참조한 값은 재렌더링이 발생하지 않음
+  --useRef는 DOM뿐만이 아닌 일반 데이터들도 참조가능
+  */
   
-  useEffect(()=>{  
-    //로딩시 interest방식으로 flickr데이터 호출  
+  useEffect(()=>{ 
     getFlickr({
       type: "interest",
       count: 500
@@ -31,32 +37,41 @@ function Gallery(){
       <div className="inner">
         <h1 onClick={()=>{          
           if(enableClick){
-            setEnableClick(false);
-            console.log("You Clicked!!!")
+            setEnableClick(false);           
             list.current.classList.remove("on");         
             setLoading(true);
+
             getFlickr({
               type: "interest",
               count: 500
             });
-          }
-          
+          }          
         }}>Gallery</h1>
-       
-        <button onClick={()=>{ 
-          if(enableClick){
-            setEnableClick(false);
-            console.log("You Clicked!!!")
-            list.current.classList.remove("on"); 
-            setLoading(true);   
-            //버튼 클릭시 키워드 검색 방식으로 데이터 호출    
-            getFlickr({
-              type: "search",
-              count: 500,
-              tags: "노을"
-            });
-          }  
-        }}>수정</button>
+
+        <div className="searchBox">
+          {/* useRef로 생성한 객체에 input요소 담기 */}
+          <input type="text" ref={input} />
+          <button onClick={()=>{
+            if(enableClick){
+              setEnableClick(false);             
+              list.current.classList.remove("on");         
+              setLoading(true);
+
+              //tags변수에 참조된 input요소의 value값 담고
+              const tags = input.current.value;
+              //input내용은 비움
+              input.current.value = "";
+
+              getFlickr({
+                type: "search",
+                count: 500,
+                tags: tags //tags변수에 있는 값을 넣어서 검색
+              });
+            }
+          }}>검색</button>
+        </div>      
+
+        
 
        
         {(loading) ? <img className="loading" src={path+"/img/loading.gif"}/> : ""}
@@ -91,25 +106,22 @@ function Gallery(){
 
  
   
-  async function getFlickr(opt){  
-    //최종적으로 만들어질 주소가 담길 빈 변수 생성
+  async function getFlickr(opt){ 
     let url = "";
-
-    //기본 주소관련 공통 변수사항 저장
+    
     const baseURL = "https://www.flickr.com/services/rest/?";
     const method1 = "flickr.interestingness.getList";
     const method2 = "flickr.photos.search";
     const key= "e7ed3b39fe112d7e93d03c19325305e0";
     const count = opt.count;
-
-    //해당 함수 호출시 type이 interest일때 호출 주소 완성
+    
     if(opt.type === "interest"){
       url = `${baseURL}method=${method1}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1`;  
     }
-    //type이 search일때 호출 주소 완성
+   
     else if(opt.type === "search"){
       url = `${baseURL}method=${method2}&api_key=${key}&per_page=${count}&format=json&nojsoncallback=1&tags=${opt.tags}`;
-    //만약 type이 위의 2가지 경우가 아닐때 오류내용 출력
+    
     }else{
       console.error("api요청 타입을 interest, search중에서 지정하세요.");
     }
@@ -126,8 +138,8 @@ function Gallery(){
       setLoading(false);
       setTimeout(()=>{
         setEnableClick(true);
-      },1000); //list에 on이 붙어서 올라오는 모션동안 방지
-    },1000); //masonry ui가 적용되는 시간동안 방지
+      },1000); 
+    },1000); 
      
   }
 }
