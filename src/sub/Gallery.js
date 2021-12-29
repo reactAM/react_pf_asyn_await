@@ -15,15 +15,8 @@ function Gallery(){
   let [items, setItems] = useState([]);   
   let [loading, setLoading] = useState(true);
   let [enableClick, setEnableClick] = useState(true);
-  let list = useRef(null); 
-  //useRef로 참조할 대상을 담을 객체 생성
+  let list = useRef(null);
   let input = useRef(null);
-  /*
-  useRef를 쓰는 이유
-  --기존의 컴포넌트들을 state값이 변경될때마다 재 렌더링이 일어남
-  --useRef를 통해서 참조한 값은 재렌더링이 발생하지 않음
-  --useRef는 DOM뿐만이 아닌 일반 데이터들도 참조가능
-  */
   
   useEffect(()=>{ 
     getFlickr({
@@ -48,24 +41,37 @@ function Gallery(){
           }          
         }}>Gallery</h1>
 
-        <div className="searchBox">
-          {/* useRef로 생성한 객체에 input요소 담기 */}
-          <input type="text" ref={input} />
-          <button onClick={()=>{
-            if(enableClick){
-              setEnableClick(false);             
+        <div className="searchBox">  
+          {/* 인풋 요소에 keypress이벤트 연결 */}
+          <input type="text" ref={input} onKeyPress={e=>{
+            if(e.key !== "Enter") return;
+            
+            setEnableClick(false);             
               list.current.classList.remove("on");         
               setLoading(true);
-
-              //tags변수에 참조된 input요소의 value값 담고
-              const tags = input.current.value;
-              //input내용은 비움
+             
+              const tags = input.current.value;              
               input.current.value = "";
 
               getFlickr({
                 type: "search",
                 count: 500,
-                tags: tags //tags변수에 있는 값을 넣어서 검색
+                tags: tags 
+              });
+          }} />
+          <button onClick={()=>{
+            if(enableClick){
+              setEnableClick(false);             
+              list.current.classList.remove("on");         
+              setLoading(true);
+             
+              const tags = input.current.value;              
+              input.current.value = "";
+
+              getFlickr({
+                type: "search",
+                count: 500,
+                tags: tags 
               });
             }
           }}>검색</button>
