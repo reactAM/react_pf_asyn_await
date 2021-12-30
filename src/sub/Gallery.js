@@ -44,7 +44,9 @@ function Gallery(){
 
         <div className="searchBox">  
           <input type="text" ref={input} onKeyPress={e=>{
-            if(e.key !== "Enter") return;
+            const tags = input.current.value; 
+             
+            if(e.key !== "Enter" || tags==="") return;
             if(enableClick){
               setEnableClick(false);  
               //검색어 입력하고 엔터키 눌렀을떄 interest값을 false로 변경해 제목클릭가능하게 설정
@@ -64,13 +66,16 @@ function Gallery(){
           }} />
           <button onClick={()=>{
             if(enableClick){
+              const tags = input.current.value; 
+              if(tags==="") return;  
+
               setEnableClick(false);  
               //검색어 버튼 클릭시 interest값을 false로 변경해 제목클릭가능하게 설정
               setInterest(false);             
               list.current.classList.remove("on");         
               setLoading(true);
              
-              const tags = input.current.value;              
+                         
               input.current.value = "";
 
               getFlickr({
