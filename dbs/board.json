@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "title": "Lorem ipsum, dolor sit amet consectetur adipisicing1.",
+      "writer": "David",
+      "date":"2022-01-01",
+      "like": 1
+    },
+    {
+      "title": "Lorem ipsum, dolor sit amet consectetur adipisicing2.",
+      "writer": "Andy",
+      "date":"2022-01-02",
+      "like": 2
+    },
+    {
+      "title": "Lorem ipsum, dolor sit amet consectetur adipisicing3.",
+      "writer": "Emma",
+      "date":"2022-01-03",
+      "like": 3
+    },
+    {
+      "title": "Lorem ipsum, dolor sit amet consectetur adipisicing4.",
+      "writer": "Tom",
+      "date":"2022-01-04",
+      "like": 4
+    }
+  ]
+}
